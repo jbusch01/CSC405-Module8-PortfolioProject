@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hidden Floor Surface Removal - House</title>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            color: #eee;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #glCanvas {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #444;
+            margin-top: 20px;
+            display: block;
+        }
+        #info {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Painter's Algorithm - House</h1>
+    <canvas id="glCanvas"></canvas>
+    <div id="info">
+        Rotating house rendered using Painter's Algorithm (back-to-front triangle sorting).<br>
+        Depth testing is disabled; visibility handled purely by drawing order.
+    </div>
+
+    <!-- Vertex Shader -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec3 aPosition;
+    attribute vec3 aColor;
+
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+
+    varying vec3 vColor;
+
+    void main(void) {
+        // Standard MVP transform: projection * modelView * aPosition
+        gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0);
+        vColor = aColor;
+    }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec3 vColor;
+
+    void main(void) {
+        gl_FragColor = vec4(vColor, 1.0);
+    }
+    </script>
+
+    <!-- Main JavaScript -->
+    <script src="main.js"></script>
+</body>
+</html>
