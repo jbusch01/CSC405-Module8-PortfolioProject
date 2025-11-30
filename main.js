@@ -53,9 +53,9 @@ function mat4Multiply(a, b) {
     for (let col = 0; col < 4; col++) {
         for (let row = 0; row < 4; row++) {
             let sum = 0.0;
-            for (let k = 0; k < 4; row++) {
+            for (let k = 0; k < 4; k++) {
                 // index = col*4 + row (column-major)
-                sum += a[k * 4 + row] * b[col * 4 +k];
+                sum += a[k * 4 + row] * b[col * 4 + k];
             }
             out[col * 4 + row] = sum;
         } 
@@ -220,7 +220,7 @@ function buildHouseGeometry() {
 
 // For each triangle, compute its average z in view space and store in tri.depth
 function computeTriangleDepths(modelViewMatrix) {
-    for (let i = 0; i < houseTriangles[i]; i++) {
+    for (let i = 0; i < houseTriangles.length; i++) {
         const tri = houseTriangles[i];
         const v0 = transformVec3(modelViewMatrix, tri.vertices[0]);
         const v1 = transformVec3(modelViewMatrix, tri.vertices[1]);
@@ -300,7 +300,7 @@ function compileShader(source, type) {
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        const infop = gl.getShaderInfoLog(shader);
+        const info = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
         throw new Error('Could not compile shader:\n' + info);
     }
@@ -320,7 +320,7 @@ function createShaderProgram() {
     gl.attachShader(program, fragShader);
     gl.linkProgram(program);
 
-    if (!gl.getProgramParamter(program, gl.LINK_STATUS)) {
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         const info = gl.getProgramInfoLog(program);
         gl.deleteProgram(program);
         throw new Error('Could not link program:\n' + info);
